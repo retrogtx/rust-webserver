@@ -13,5 +13,8 @@ fn main() {
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer: [u8; 1024] = [0; 1024];
     stream.read(&mut buffer).unwrap();
-    println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
+    
+    let response = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n<html>Hello World</html>";
+    stream.write_all(response.as_bytes()).unwrap();
+    stream.flush().unwrap();
 }
