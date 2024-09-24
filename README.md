@@ -1,2 +1,3 @@
-# http-from-scratch
-simple http server from scratch in c++
+# Web Server from Scratch
+
+This is a simple web server written in Rust from scratch.
