@@ -4,8 +4,19 @@ pub struct ThreadPool {
 
 impl ThreadPool {
     pub fn new(size: usize) -> ThreadPool {
-        ThreadPool {
-            workers: Vec::with_capacity(size),
+        assert!(size > 0);
+        let mut workers = Vec::with_capacity(size);
+        for id in 0..size {
+            workers.push(Worker::new(id));
         }
+        ThreadPool { workers }
+    }
+
+    pub fn execute<F>(&self, f: F)
+    where
+        F: FnOnce() + Send + 'static,
+    {
+        let job = Box::new(f);  
+        self.workers[0].execute(job);
     }
 }
