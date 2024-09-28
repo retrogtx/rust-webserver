@@ -1,15 +1,17 @@
 pub struct ThreadPool {
-    workers: Vec<Worker>,
+    workers: Vec<thread::JoinHandle<()>>,
 }
 
 impl ThreadPool {
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
-        let mut workers = Vec::with_capacity(size);
+        let mut threads = Vec::with_capacity(size);
+
         for id in 0..size {
-            workers.push(Worker::new(id));
+            threads.push(Worker::new(id));
         }
-        ThreadPool { workers }
+        
+        ThreadPool { threads }
     }
 
     pub fn execute<F>(&self, f: F)
